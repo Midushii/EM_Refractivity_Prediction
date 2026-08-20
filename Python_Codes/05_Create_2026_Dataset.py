@@ -1,19 +1,3 @@
-"""
-=========================================================
-05_Create_2026_Dataset.py
-
-Purpose:
-Read ERA5_2026.grib and create a Machine Learning dataset
-for external validation.
-
-Input:
-    ERA5_2026.grib
-
-Output:
-    ML_Dataset_2026.csv
-=========================================================
-"""
-
 import xarray as xr
 import pandas as pd
 import numpy as np
@@ -21,11 +5,6 @@ import numpy as np
 print("="*60)
 print("CREATING 2026 MACHINE LEARNING DATASET")
 print("="*60)
-
-# -------------------------------------------------------
-# Read GRIB
-# -------------------------------------------------------
-
 print("\nReading ERA5_2026.grib ...")
 
 ds = xr.open_dataset(
@@ -35,11 +14,6 @@ ds = xr.open_dataset(
 
 print("\nDataset Successfully Loaded\n")
 print(ds)
-
-# -------------------------------------------------------
-# Extract Variables
-# -------------------------------------------------------
-
 temperature = ds["t"]
 humidity = ds["q"]
 geopotential = ds["z"]
@@ -47,10 +21,6 @@ geopotential = ds["z"]
 records = []
 
 print("\nCreating Dataset...\n")
-
-# -------------------------------------------------------
-# Loop through all dimensions
-# -------------------------------------------------------
 
 for t in range(len(ds.time)):
 
@@ -119,9 +89,6 @@ for t in range(len(ds.time)):
 
                 ])
 
-# -------------------------------------------------------
-# Create DataFrame
-# -------------------------------------------------------
 
 columns = [
 
@@ -154,9 +121,6 @@ print(df.head())
 
 print("\nTotal Samples :", len(df))
 
-# -------------------------------------------------------
-# Save CSV
-# -------------------------------------------------------
 
 df.to_csv(
     "ML_Dataset_2026.csv",
