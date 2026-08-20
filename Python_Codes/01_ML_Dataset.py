@@ -1,28 +1,7 @@
-"""
-------------------------------------------------------------
-01_Create_ML_Dataset.py
-
-Creates Machine Learning Dataset from ERA5 Pressure Level Data
-
-Inputs
-------
-ERA5.grib
-
-Outputs
--------
-ML_Dataset.csv
-
-Author : Vini
-------------------------------------------------------------
-"""
 
 import xarray as xr
 import pandas as pd
 import numpy as np
-
-# ============================================================
-# Read ERA5 GRIB File
-# ============================================================
 
 print("\nReading ERA5 GRIB file...\n")
 
@@ -33,10 +12,6 @@ ds = xr.open_dataset(
 
 print(ds)
 
-# ============================================================
-# Extract Variables
-# ============================================================
-
 temperature = ds["t"]           # Kelvin
 humidity = ds["q"]              # kg/kg
 geopotential = ds["z"]          # m²/s²
@@ -46,19 +21,11 @@ times = ds["time"].values
 latitudes = ds["latitude"].values
 longitudes = ds["longitude"].values
 
-# ============================================================
-# Prepare Lists
-# ============================================================
-
 rows = []
 
 g = 9.80665
 
 print("\nCreating Machine Learning Dataset...\n")
-
-# ============================================================
-# Loop Through Dataset
-# ============================================================
 
 for t_index, timestamp in enumerate(times):
 
@@ -102,23 +69,14 @@ for t_index, timestamp in enumerate(times):
                     ]
                 )
 
-                # ---------------------------------------------
-                # Geopotential Height
-                # ---------------------------------------------
+              
 
                 height = z / g
 
-                # ---------------------------------------------
-                # Vapour Pressure
-                #
-                # e = qP / (0.622 + 0.378q)
-                # ---------------------------------------------
+                
 
                 e = (q * pressure_hPa) / (0.622 + 0.378 * q)
 
-                # ---------------------------------------------
-                # Radio Refractivity
-                # ---------------------------------------------
 
                 N = (
                     (77.6 * pressure_hPa / T)
@@ -141,9 +99,6 @@ for t_index, timestamp in enumerate(times):
                     N
                 ])
 
-# ============================================================
-# Create DataFrame
-# ============================================================
 
 columns = [
 
@@ -164,18 +119,14 @@ columns = [
 
 df = pd.DataFrame(rows, columns=columns)
 
-# ============================================================
-# Save Dataset
-# ============================================================
 
 df.to_csv(
     "ML_Dataset.csv",
     index=False
 )
 
-print("\n====================================")
 print("Machine Learning Dataset Created")
-print("====================================")
+
 
 print(df.head())
 
