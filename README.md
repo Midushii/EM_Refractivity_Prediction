@@ -1,4 +1,4 @@
-# EM Refractivity Prediction — Machine Learning Reconstruction of Radio Refractivity from ERA5 Reanalysis
+# EM Refractivity Prediction: Machine Learning Reconstruction of Radio Refractivity from ERA5 Reanalysis
 
 A machine-learning pipeline that reconstructs atmospheric radio refractivity over the Mumbai coastal Arabian Sea from ERA5 pressure-level reanalysis data, trains a Random Forest regressor on historical refractivity, and validates the model against an independent, out-of-sample year.
 
@@ -33,7 +33,7 @@ This project addresses three linked questions:
 | Training / testing record | 2010 – 2025 (hourly) |
 | Independent validation record | 2026 (Jan – Jun, hourly) |
 
-The domain sits off the Mumbai coast in the Arabian Sea, where strong thermal and moisture gradients in the lower troposphere drive significant short-term and seasonal variability in radio refractivity — relevant to maritime EM propagation, coastal radar, and RF link planning.
+The domain sits off the Mumbai coast in the Arabian Sea, where strong thermal and moisture gradients in the lower troposphere drive significant short-term and seasonal variability in radio refractivity, relevant to maritime EM propagation, coastal radar, and RF link planning.
 
 ---
 
@@ -90,7 +90,7 @@ e = (q × P) / (0.622 + 0.378 q)
 
 Geopotential `z` is converted to geometric height via `height = z / g` (g = 9.80665 m/s²) and retained as a derived field, though it is not used as a training feature (redundant with pressure level).
 
-This physically-derived `N` is the regression target: the model learns to reconstruct it directly from time, position, and pressure — rather than from a full bulk surface-layer solve at inference time.
+This physically-derived `N` is the regression target: the model learns to reconstruct it directly from time, position, and pressure, rather than from a full bulk surface-layer solve at inference time.
 
 ---
 
@@ -127,7 +127,7 @@ Month_Sin, Month_Cos, Hour_Sin, Hour_Cos
 | `min_samples_leaf` | 2 |
 | `random_state` | 42 |
 
-**Train / test split:** temporal, not random — 2010–2024 for training, 2025 held out entirely for testing. This avoids leakage between adjacent hourly samples and gives a realistic estimate of forward-in-time predictive skill.
+**Train / test split:** temporal, not random, 2010–2024 for training, 2025 held out entirely for testing. This avoids leakage between adjacent hourly samples and gives a realistic estimate of forward-in-time predictive skill.
 
 The trained model is serialised to `RandomForest_Model.pkl` for reuse in the 2026 prediction stage.
 
@@ -182,7 +182,7 @@ Errors are approximately centred on zero with no strong systematic trend against
 
 ### 8.4 Independent 2026 validation
 
-The 2026 GRIB extract (January–June) is processed through an identical, independently-run pipeline and used purely as an out-of-sample forward test — the model never sees this data during training.
+The 2026 GRIB extract (January–June) is processed through an identical, independently-run pipeline and used purely as an out-of-sample forward test, the model never sees this data during training.
 
 | Metric | Value |
 |---|---|
@@ -198,7 +198,7 @@ The 2026 GRIB extract (January–June) is processed through an identical, indepe
   <img src="Figures/Time_Series_2026.png" width="380">
 </p>
 
-**Performance degrades moderately relative to the 2025 hold-out** (R² 0.78 vs. 0.86, a persistent negative bias of ~9 N-units), which is expected for a purely statistical model extrapolating one to two years beyond its training window and across a partial-year (H1-only) sample. This gap is treated as a genuine limitation rather than smoothed over — see Section 10.
+**Performance degrades moderately relative to the 2025 hold-out** (R² 0.78 vs. 0.86, a persistent negative bias of ~9 N-units), which is expected for a purely statistical model extrapolating one to two years beyond its training window and across a partial-year (H1-only) sample. This gap is treated as a genuine limitation rather than smoothed over, see Section 10.
 
 ---
 
@@ -235,8 +235,8 @@ EM_Refractivity_Prediction/
 │   └── Validation_2026_Metrics.csv    2026 external validation metrics
 │
 └── Figures/
-    ├── Predicted_vs_Observed.png              Training-stage scatter (2025 test)
-    ├── Feature_Importance.png                 Random Forest feature ranking
+    ├── Predicted_vs_Observed.png               Training-stage scatter (2025 test)
+    ├── Feature_Importance.png                  Random Forest feature ranking
     ├── Observed_vs_Predicted.png               Validation-stage scatter (2025 test)
     ├── Time_Series_Comparison.png              Observed vs predicted, first 500 samples (2025)
     ├── Prediction_Error_Histogram.png          Error distribution (2025)
@@ -253,10 +253,10 @@ EM_Refractivity_Prediction/
 
 - ERA5 provides a modelled atmospheric state, not direct local observations; the refractivity "ground truth" used here is itself physically derived from ERA5, not independently measured.
 - The model is trained on only 3 pressure levels (850, 925, 1000 hPa) and a small 3×3 spatial grid (0.25° spacing); it is not intended to generalise beyond this vertical or spatial domain.
-- `Year` is included as a raw numeric feature, which lets the Random Forest partially fit any long-term trend in the training window — but this is a poor basis for extrapolating multiple years ahead, and is a likely contributor to the degraded 2026 bias.
+- `Year` is included as a raw numeric feature, which lets the Random Forest partially fit any long-term trend in the training window, but this is a poor basis for extrapolating multiple years ahead, and is a likely contributor to the degraded 2026 bias.
 - The 2026 validation set covers only January–June, so seasonal error behaviour for the second half of the year is untested.
 - A Random Forest cannot extrapolate outside the value ranges seen in training; it can only interpolate within the joint feature space observed in 2010–2024.
-- No comparison is made here against a physics-based bulk/similarity-theory reconstruction of refractivity — the ML model is evaluated purely against its own ITU-R-derived target, not against an independent physical baseline.
+- No comparison is made here against a physics-based similarity-theory reconstruction of refractivity, the ML model is evaluated purely against its own ITU-R-derived target, not against an independent physical baseline.
 
 ---
 
@@ -275,15 +275,15 @@ EM_Refractivity_Prediction/
 ## 12. Reproducibility
 
 ```
-1. ERA5.grib → 01_ML_Dataset.py               → ML_Dataset.csv
+1. ERA5.grib → 01_ML_Dataset.py                → ML_Dataset.csv
 2. ML_Dataset.csv → 02_Feature_Engineering.py  → ML_Features.csv, Feature_Correlation.csv
 3. ML_Features.csv → 03_Train_RandomForest.py  → RandomForest_Model.pkl, Model_Performance.csv,
-                                                   Prediction_Results.csv, Feature_Importance.csv
-4. Prediction_Results.csv → 04_Model_Validation.py → Validation_Metrics.csv + diagnostic figures
-5. ERA5_2026.grib → 05_Create_2026_Dataset.py  → ML_Dataset_2026.csv
+                                                 Prediction_Results.csv, Feature_Importance.csv
+4. Prediction_Results.csv → 04_Model_Validation.py  → Validation_Metrics.csv + diagnostic figures
+5. ERA5_2026.grib → 05_Create_2026_Dataset.py       → ML_Dataset_2026.csv
 6. ML_Dataset_2026.csv → 06_Feature_Engineering_2026.py → ML_Features_2026.csv
-7. RandomForest_Model.pkl + ML_Features_2026.csv → 07_Predict_2026.py → Predicted-2026.csv
-8. Predicted-2026.csv → 08_Validate_2026.py    → Validation_2026_Metrics.csv + diagnostic figures
+7. RandomForest_Model.pkl + ML_Features_2026.csv        → 07_Predict_2026.py → Predicted-2026.csv
+8. Predicted-2026.csv → 08_Validate_2026.py             → Validation_2026_Metrics.csv + diagnostic figures
 ```
 
 All scripts are run from `Python_Codes/` and expect the corresponding `Data/` and `Results/` files to be present in the working directory.
@@ -314,7 +314,7 @@ All scripts are run from `Python_Codes/` and expect the corresponding `Data/` an
 
 ## 15. Scientific Context
 
-Radio refractivity governs how radio waves bend as they travel through the lower atmosphere, determining the effective propagation range of maritime communications, coastal radar, and RF links, and underlying more advanced phenomena such as evaporation ducting and anomalous propagation. Reanalysis-driven, machine-learning reconstruction of refractivity offers a computationally lightweight alternative to full bulk atmospheric-profile solutions, at the cost of relying on statistical rather than first-principles generalisation — a trade-off this project quantifies directly through its 2025 and 2026 validation stages.
+Radio refractivity governs how radio waves bend as they travel through the lower atmosphere, determining the effective propagation range of maritime communications, coastal radar, and RF links, and underlying more advanced phenomena such as evaporation ducting and anomalous propagation. Reanalysis-driven, machine-learning reconstruction of refractivity offers a computationally lightweight alternative to full bulk atmospheric-profile solutions, at the cost of relying on statistical rather than first-principles generalisation, a trade-off this project quantifies directly through its 2025 and 2026 validation stages.
 
 ---
 
@@ -327,8 +327,8 @@ B.Tech. Electronics and Communication Engineering with Specialization in AI | IG
 
 If this repository or its methodology is used in subsequent research, please cite the repository and acknowledge the underlying ERA5 dataset and the ITU-R P.453 formulation referenced in Section 5.
 
-### License
+This project is licensed under the MIT License. You are free to use, modify, and distribute the code, subject to the terms of the license.
 
-This repository is currently being prepared for public research release. Licensing information will be provided with the release.
+See the LICENSE file for the full license text.
 
 For further information, please contact **midushi.maheswari@gmail.com**
