@@ -1,28 +1,3 @@
-"""
-=========================================================
-03_Train_RandomForest.py
-
-Purpose:
-Train a Random Forest model to predict
-Radio Refractivity (N)
-
-Training Data : 2010–2024
-Testing Data  : 2025
-
-Outputs:
----------
-RandomForest_Model.pkl
-Model_Performance.csv
-Prediction_Results.csv
-Feature_Importance.csv
-Predicted_vs_Observed.png
-Feature_Importance.png
-
-Author:
-DRDO Atmospheric EM Propagation Study
-=========================================================
-"""
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,9 +14,7 @@ print("=" * 60)
 print("RANDOM FOREST MODEL")
 print("=" * 60)
 
-# ----------------------------------------------------------
-# Read Dataset
-# ----------------------------------------------------------
+
 
 print("\nReading ML_Features.csv...")
 
@@ -50,9 +23,6 @@ df = pd.read_csv("ML_Features.csv")
 print("Dataset Loaded Successfully")
 print("Shape :", df.shape)
 
-# ----------------------------------------------------------
-# Input Features
-# ----------------------------------------------------------
 
 features = [
 
@@ -76,9 +46,6 @@ print("\nInput Features")
 for feature in features:
     print(" •", feature)
 
-# ----------------------------------------------------------
-# Training / Testing Split
-# ----------------------------------------------------------
 
 train = df[df["Year"] <= 2024]
 
@@ -94,10 +61,6 @@ y_test = test[target]
 
 print("\nTraining Samples :", len(train))
 print("Testing Samples  :", len(test))
-
-# ----------------------------------------------------------
-# Train Random Forest
-# ----------------------------------------------------------
 
 print("\nTraining Random Forest Model...")
 
@@ -116,17 +79,11 @@ model.fit(X_train, y_train)
 
 print("Training Complete")
 
-# ----------------------------------------------------------
-# Prediction
-# ----------------------------------------------------------
 
 print("\nPredicting Refractivity for 2025...")
 
 prediction = model.predict(X_test)
 
-# ----------------------------------------------------------
-# Evaluation Metrics
-# ----------------------------------------------------------
 
 mae = mean_absolute_error(y_test, prediction)
 
@@ -143,9 +100,6 @@ print(f"RMSE : {rmse:.4f}")
 print(f"R²   : {r2:.4f}")
 print(f"Bias : {bias:.4f}")
 
-# ----------------------------------------------------------
-# Save Metrics
-# ----------------------------------------------------------
 
 performance = pd.DataFrame({
 
@@ -170,9 +124,6 @@ performance.to_csv(
     index=False
 )
 
-# ----------------------------------------------------------
-# Save Predictions
-# ----------------------------------------------------------
 
 results = test.copy()
 
@@ -183,9 +134,6 @@ results.to_csv(
     index=False
 )
 
-# ----------------------------------------------------------
-# Feature Importance
-# ----------------------------------------------------------
 
 importance = pd.DataFrame({
 
@@ -205,18 +153,12 @@ importance.to_csv(
     index=False
 )
 
-# ----------------------------------------------------------
-# Save Model
-# ----------------------------------------------------------
 
 joblib.dump(
     model,
     "RandomForest_Model.pkl"
 )
 
-# ----------------------------------------------------------
-# Scatter Plot
-# ----------------------------------------------------------
 
 plt.figure(figsize=(7,7))
 
@@ -248,10 +190,6 @@ plt.savefig(
 
 plt.close()
 
-# ----------------------------------------------------------
-# Feature Importance Plot
-# ----------------------------------------------------------
-
 plt.figure(figsize=(8,5))
 
 plt.bar(
@@ -274,9 +212,6 @@ plt.savefig(
 
 plt.close()
 
-# ----------------------------------------------------------
-# Summary
-# ----------------------------------------------------------
 
 print("\nFiles Generated")
 print("------------------------------")
