@@ -1,22 +1,3 @@
-"""
-=========================================================
-08_Validate_2026.py
-
-Purpose:
-Validate Random Forest predictions using
-observed ERA5 refractivity for 2026.
-
-Input:
-    Predicted_2026.csv
-
-Outputs:
-    Validation_2026_Metrics.csv
-    Observed_vs_Predicted_2026.png
-    Time_Series_2026.png
-    Residual_Plot_2026.png
-    Prediction_Error_Histogram_2026.png
-=========================================================
-"""
 
 import pandas as pd
 import numpy as np
@@ -32,9 +13,6 @@ print("="*60)
 print("2026 EXTERNAL VALIDATION")
 print("="*60)
 
-# ---------------------------------------------------
-# Read Prediction File
-# ---------------------------------------------------
 
 print("\nReading Predicted_2026.csv...")
 
@@ -46,9 +24,7 @@ print(df.shape)
 observed = df["Radio_Refractivity"]
 predicted = df["Predicted_Refractivity"]
 
-# ---------------------------------------------------
-# Metrics
-# ---------------------------------------------------
+
 
 mae = mean_absolute_error(observed, predicted)
 
@@ -66,9 +42,7 @@ print(f"RMSE : {rmse:.4f}")
 print(f"R²   : {r2:.4f}")
 print(f"Bias : {bias:.4f}")
 
-# ---------------------------------------------------
-# Error Statistics
-# ---------------------------------------------------
+
 
 error = predicted - observed
 
@@ -80,9 +54,7 @@ print("Std Error       :", round(error.std(),3))
 print("Maximum Error   :", round(error.max(),3))
 print("Minimum Error   :", round(error.min(),3))
 
-# ---------------------------------------------------
-# Save Metrics
-# ---------------------------------------------------
+
 
 metrics = pd.DataFrame({
 
@@ -115,9 +87,7 @@ metrics.to_csv(
     index=False
 )
 
-# ---------------------------------------------------
-# Scatter Plot
-# ---------------------------------------------------
+
 
 plt.figure(figsize=(7,7))
 
@@ -148,9 +118,7 @@ plt.savefig(
 
 plt.close()
 
-# ---------------------------------------------------
-# Time Series
-# ---------------------------------------------------
+
 
 plt.figure(figsize=(12,5))
 
@@ -181,9 +149,6 @@ plt.savefig(
 
 plt.close()
 
-# ---------------------------------------------------
-# Histogram
-# ---------------------------------------------------
 
 plt.figure(figsize=(7,5))
 
@@ -207,9 +172,7 @@ plt.savefig(
 
 plt.close()
 
-# ---------------------------------------------------
-# Residual Plot
-# ---------------------------------------------------
+
 
 plt.figure(figsize=(7,5))
 
