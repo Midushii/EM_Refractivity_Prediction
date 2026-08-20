@@ -1,19 +1,3 @@
-"""
-=========================================================
-06_Feature_Engineering_2026.py
-
-Purpose:
-Create machine learning features for 2026
-using the same preprocessing as the training data.
-
-Input:
-    ML_Dataset_2026.csv
-
-Output:
-    ML_Features_2026.csv
-=========================================================
-"""
-
 import pandas as pd
 import numpy as np
 
@@ -29,10 +13,6 @@ print("Dataset Loaded")
 
 print(df.shape)
 
-# ----------------------------------------------------
-# Day of Year
-# ----------------------------------------------------
-
 date = pd.to_datetime(
     dict(
         year=df.Year,
@@ -43,10 +23,6 @@ date = pd.to_datetime(
 
 df["Day_of_Year"] = date.dt.dayofyear
 
-# ----------------------------------------------------
-# Cyclic Month
-# ----------------------------------------------------
-
 df["Month_Sin"] = np.sin(
     2*np.pi*df["Month"]/12
 )
@@ -55,10 +31,6 @@ df["Month_Cos"] = np.cos(
     2*np.pi*df["Month"]/12
 )
 
-# ----------------------------------------------------
-# Cyclic Hour
-# ----------------------------------------------------
-
 df["Hour_Sin"] = np.sin(
     2*np.pi*df["Hour"]/24
 )
@@ -66,10 +38,6 @@ df["Hour_Sin"] = np.sin(
 df["Hour_Cos"] = np.cos(
     2*np.pi*df["Hour"]/24
 )
-
-# ----------------------------------------------------
-# Season
-# ----------------------------------------------------
 
 def season(month):
 
@@ -86,10 +54,6 @@ def season(month):
         return 4
 
 df["Season"] = df["Month"].apply(season)
-
-# ----------------------------------------------------
-# Save
-# ----------------------------------------------------
 
 df.to_csv(
     "ML_Features_2026.csv",
