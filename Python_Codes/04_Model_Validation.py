@@ -1,25 +1,4 @@
-"""
-=========================================================
-04_Model_Validation.py
 
-Purpose:
-Validate the Random Forest predictions for the
-independent test year (2025).
-
-Inputs:
--------
-Prediction_Results.csv
-
-Outputs:
---------
-Validation_Metrics.csv
-Observed_vs_Predicted.png
-Time_Series_Comparison.png
-Prediction_Error_Histogram.png
-Residual_Plot.png
-
-=========================================================
-"""
 
 import pandas as pd
 import numpy as np
@@ -35,9 +14,6 @@ print("="*60)
 print("MODEL VALIDATION")
 print("="*60)
 
-# ---------------------------------------------------------
-# Read Prediction Results
-# ---------------------------------------------------------
 
 print("\nReading Prediction_Results.csv...")
 
@@ -47,17 +23,9 @@ print("Dataset Loaded")
 
 print(df.shape)
 
-# ---------------------------------------------------------
-# Observed and Predicted Values
-# ---------------------------------------------------------
-
 observed = df["Radio_Refractivity"]
 
 predicted = df["Predicted_Refractivity"]
-
-# ---------------------------------------------------------
-# Metrics
-# ---------------------------------------------------------
 
 mae = mean_absolute_error(observed,predicted)
 
@@ -105,10 +73,6 @@ metrics.to_csv(
 
 )
 
-# ---------------------------------------------------------
-# Scatter Plot
-# ---------------------------------------------------------
-
 plt.figure(figsize=(7,7))
 
 plt.scatter(
@@ -155,9 +119,6 @@ plt.savefig(
 
 plt.close()
 
-# ---------------------------------------------------------
-# Time Series
-# ---------------------------------------------------------
 
 plt.figure(figsize=(12,5))
 
@@ -197,10 +158,6 @@ plt.savefig(
 
 plt.close()
 
-# ---------------------------------------------------------
-# Error Histogram
-# ---------------------------------------------------------
-
 errors = predicted-observed
 
 plt.figure(figsize=(8,5))
@@ -230,10 +187,6 @@ plt.savefig(
 )
 
 plt.close()
-
-# ---------------------------------------------------------
-# Residual Plot
-# ---------------------------------------------------------
 
 plt.figure(figsize=(8,5))
 
@@ -274,10 +227,6 @@ plt.savefig(
 )
 
 plt.close()
-
-# ---------------------------------------------------------
-# Error Statistics
-# ---------------------------------------------------------
 
 print("\nError Statistics")
 
